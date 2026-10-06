@@ -1990,9 +1990,9 @@ enum NotchTests {
                 && NotchGlassFade.plan(from: .nan, to: 100, endsInGlass: false, current: 1) == .open,
                "glass resizing into glass, or an unreadable height, stays fully open")
         let compactMusic = roomy.compactMusicGeometry
-        suite.expect(compactMusic.compactActivityWingWidth == 34
+        suite.expect(compactMusic.compactActivityWingWidth == 39
                && compactMusic.compactActivityCameraGap == roomy.cameraWidth
-               && compactMusic.compactActivitySize.width == roomy.cameraWidth + 68,
+               && compactMusic.compactActivitySize.width == roomy.cameraWidth + 78,
                "compact music wings beside a physical camera hold only the cover and the bars")
         for safeArea: CGFloat in [32, 33, 37.5, 38] {
             let music = NotchGeometry(screen: menuScreen, safeAreaTop: safeArea, cameraWidth: 185,
@@ -2004,9 +2004,9 @@ enum NotchTests {
             let gap = (height - side) / 2
             let radius = music.compactMusicArtworkRadius
             let inset = music.compactMusicArtworkInset
-            suite.expect(abs(inset - shoulder - gap) < 0.001 && abs(inset + radius - shoulder - corner) < 0.001
+            suite.expect(abs(inset - shoulder - max(gap, NotchLayout.compactSideGap)) < 0.001
                    && abs(height - gap - radius - (height - corner)) < 0.001,
-                   "the cover keeps one gap from the strip's end, top and bottom, its corners concentric with the strip's")
+                   "the cover keeps the side gap from the strip's end and an even gap top and bottom")
             let bars = music.compactMusicBarsInset + NotchLayout.compactMusicBarsWidth
             suite.expect(music.compactActivityWingWidth == max(inset + side, bars).rounded(.up)
                    && music.compactActivityWingWidth < 44,
@@ -2021,7 +2021,7 @@ enum NotchTests {
                    "compact music never grows or moves below the menu bar when space changes")
             if available.isFinite && available >= compactMusic.compactActivityWingWidth {
                 suite.expect(music.compactActivityWingWidth == compactMusic.compactActivityWingWidth
-                       && music.compactMusicArtworkSide == 22
+                       && music.compactMusicArtworkSide == 24
                        && music.compactMusicArtworkInset + music.compactMusicArtworkSide <= music.compactActivityWingWidth
                        && music.compactActivityCameraGap == roomy.cameraWidth,
                        "fitted music wings keep a full cover and its outer margin beside the camera")

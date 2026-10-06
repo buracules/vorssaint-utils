@@ -272,7 +272,10 @@ enum NotchLayout {
         return CGSize(width: min(width, height * 16 / 9), height: min(height, width * 3 / 4))
     }
     /// Breathing room every compact strip keeps from its silhouette.
-    static let compactEdgeGap: CGFloat = 5
+    static let compactEdgeGap: CGFloat = 4
+    /// Room a compact strip's mark and reading keep from the curved ends,
+    /// wider than the top and bottom so they do not crowd the corners.
+    static let compactSideGap: CGFloat = 8
     /// The compact player's equalizer, spaced by its own bar width.
     static let compactMusicBarCount = 7
     static let compactMusicBarWidth: CGFloat = 1.8
@@ -1856,8 +1859,9 @@ struct NotchGeometry: Equatable {
         return min(side / 2, max(side * 0.2, concentric))
     }
     var compactMusicArtworkInset: CGFloat {
-        let gap = compactMusicArtworkFills ? (compactActivityContentHeight - compactMusicArtworkSide) / 2
-            : NotchLayout.compactEdgeGap
+        let gap = compactMusicArtworkFills
+            ? max(NotchLayout.compactSideGap, (compactActivityContentHeight - compactMusicArtworkSide) / 2)
+            : NotchLayout.compactSideGap
         return compactActivityEdgeInset(boxHeight: compactMusicArtworkSide, radius: compactMusicArtworkRadius, gap: gap)
     }
     var compactMusicBarHeight: CGFloat {
@@ -1986,7 +1990,7 @@ struct NotchGeometry: Equatable {
     /// meters grazing the curve. Push the box in until its own corner keeps the
     /// same distance from the arc that its top keeps from the shoulder.
     func compactActivityEdgeInset(boxHeight: CGFloat, radius: CGFloat,
-                                  gap: CGFloat = NotchLayout.compactEdgeGap) -> CGFloat {
+                                  gap: CGFloat = NotchLayout.compactSideGap) -> CGFloat {
         let shoulder = compactActivityShoulder
         let corner = min(NotchLayout.surfaceRadius(height: compactActivitySize.height),
                          (compactActivitySize.width - shoulder * 2) / 2)

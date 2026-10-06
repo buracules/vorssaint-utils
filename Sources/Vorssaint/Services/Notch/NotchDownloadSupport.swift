@@ -185,9 +185,11 @@ enum NotchDownloadSupport {
         .percent.precision(.fractionLength(0)).locale(Locale(identifier: language.rawValue))
     }
 
-    /// Digits carry no descenders, so their ink is about the cap height.
+    /// Digits carry no descenders, so their ink is about the cap height. The
+    /// narrowest wing has no room for the wider side gap, so the reading keeps
+    /// the tighter one.
     static func percentInset(in geometry: NotchGeometry) -> CGFloat {
-        geometry.compactActivityEdgeInset(boxHeight: percentSize * 0.72, radius: 0)
+        geometry.compactActivityEdgeInset(boxHeight: percentSize * 0.72, radius: 0, gap: NotchLayout.compactEdgeGap)
     }
 
     /// Restore the file name only when menus leave a readable wing. Otherwise
